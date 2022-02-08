@@ -1,4 +1,4 @@
-package com.gopizza;
+package host.exp.exponent;
 
 import android.os.Build;
 import android.os.Bundle;
