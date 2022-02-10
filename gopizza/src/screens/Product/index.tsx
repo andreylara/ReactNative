@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Platform, TouchableOpacity, ScrollView } from "react-native";
+import { Platform, TouchableOpacity, ScrollView, Alert } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 
 import { ButtonBack } from "@components/ButtonBack";
@@ -24,6 +24,12 @@ import {
 
 export function Product() {
     const [image, setImage] = useState('');
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [priceSizeP, setPriceSizeP] = useState('');
+    const [priceSizeM, setPriceSizeM] = useState('');
+    const [priceSizeG, setPriceSizeG] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     async function handlePickerImage() {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -39,9 +45,29 @@ export function Product() {
         }
     }
 
+    async function handleAdd() {
+        if(!name.trim()) {
+            return Alert.alert('Cadastro', 'Informe o nome da pizza.');
+        }
+
+        if(!description.trim()) {
+            return Alert.alert('Cadastro', 'Informe a descrição da pizza.');
+        }
+
+        if(!image) {
+            return Alert.alert('Cadastro', 'Selecione a imagem da pizza.');
+        }
+
+        if(!priceSizeP || !priceSizeM || !priceSizeG) {
+            return Alert.alert('Cadastro', 'informe o preço de todos os tamanhos da pizza.');
+        }
+    }
+
     return (
-        <Container behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+        <Container
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+            <ScrollView
+                showsVerticalScrollIndicator={false}>
                 <Header>
                     <ButtonBack />
 
@@ -53,7 +79,8 @@ export function Product() {
                 </Header>
 
                 <Upload>
-                    <Photo uri={image} />
+                    <Photo
+                        uri={image} />
 
                     <PickImageButton
                         title="Carregar"
@@ -64,7 +91,9 @@ export function Product() {
                 <Form>
                     <InputGroup>
                         <Label>Nome</Label>
-                        <Input />
+                        <Input
+                            onChangeText={setName}
+                            value={name} />
                     </InputGroup>
 
                     <InputGroup>
@@ -75,18 +104,32 @@ export function Product() {
                         <Input
                             multiline
                             maxLength={60}
-                            style={{ height: 80 }} />
+                            style={{ height: 80 }}
+                            onChangeText={setDescription}
+                            value={description} />
                     </InputGroup>
 
                     <InputGroup>
                         <Label>Tamanhos e preços</Label>
 
-                        <InputPrice size="P" />
-                        <InputPrice size="M" />
-                        <InputPrice size="G" />
+                        <InputPrice
+                            size="P"
+                            onChangeText={setPriceSizeP}
+                            value={priceSizeP} />
+                        <InputPrice
+                            size="M"
+                            onChangeText={setPriceSizeM}
+                            value={priceSizeM} />
+                        <InputPrice
+                            size="G"
+                            onChangeText={setPriceSizeG}
+                            value={priceSizeG} />
                     </InputGroup>
 
-                    <Button title="Cadastrar pizza" />
+                    <Button
+                        title="Cadastrar pizza"
+                        isLoading={isLoading} 
+                        onPress={handleAdd}/>
                 </Form>
             </ScrollView>
         </Container>
