@@ -12,10 +12,10 @@ export const Container = styled.View`
 `;
 
 export const Size = styled.View`
-    heigth: 56px;
+    height: 56px;
     width: 56px;
     justify-content: center;
-    align-items: centes;
+    align-items: center;
     border-right-width: 1px;
     border-right-color: ${({ theme }) => theme.COLORS.SHAPE};
     margin-right: 18px;
