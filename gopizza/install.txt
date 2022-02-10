@@ -9,3 +9,4 @@ expo install react-native-gesture-handler
 yarn add react-native-iphone-x-helper
 expo install @react-native-async-storage/async-storage
 Configuração image-picker: https://docs.expo.dev/versions/latest/sdk/imagepicker/
+Configuração storage: Firebase > Storage > Rules > 'allow read, write: if false;' > 'allow read, write;'
