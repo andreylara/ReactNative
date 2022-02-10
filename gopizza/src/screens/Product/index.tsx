@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 import { ButtonBack } from "@components/ButtonBack";
 import { Photo } from "@components/Photo";
+import { InputPrice } from "@components/ImputPrice";
 
 import {
     Container,
@@ -53,6 +54,10 @@ export function Product() {
                     type="secondary" 
                     onPress={handlePickerImage}/>
             </Upload>
+
+            <InputPrice size="P" />
+            <InputPrice size="M" />
+            <InputPrice size="G" />
         </Container>
     )
 }
