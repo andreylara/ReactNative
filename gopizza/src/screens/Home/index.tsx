@@ -3,13 +3,14 @@ import { Alert, TouchableOpacity, FlatList } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from "styled-components";
 import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from "@react-navigation/native";
 
 import happyEmoji from '@assets/happy.png';
 
 import { Search } from "@components/Search";
 import { ProductCard, ProductProps } from "@components/ProductCard";
 
-import { 
+import {
     Container,
     Header,
     Greeting,
@@ -22,29 +23,31 @@ import {
 
 export function Home() {
     const [pizzas, setPizzas] = useState<ProductProps[]>([]);
-    const[search, setSearch] = useState('');
+    const [search, setSearch] = useState('');
+
     const { COLORS } = useTheme();
+    const navigation = useNavigation();
 
     function fetchPizzas(value: string){
         const formattedValue = value.toLocaleLowerCase().trim();
 
         firestore()
-        .collection('pizzas')
-        .orderBy('name_insensitive')
-        .startAt(formattedValue)
-        .endAt(`${formattedValue}\uf8ff`)
-        .get()
-        .then(response => {
-            const data = response.docs.map(doc => {
-                return {
-                    id: doc.id,
-                    ...doc.data(),
-                }
-            }) as ProductProps[];
+            .collection('pizzas')
+            .orderBy('name_insensitive')
+            .startAt(formattedValue)
+            .endAt(`${formattedValue}\uf8ff`)
+            .get()
+            .then(response => {
+                const data = response.docs.map(doc => {
+                    return {
+                        id: doc.id,
+                        ...doc.data(),
+                    }
+                }) as ProductProps[];
 
-            setPizzas(data);
-        })
-        .catch(() => Alert.alert('Consulta', 'Não foi possível realizar a consulta'));
+                setPizzas(data);
+            })
+            .catch(() => Alert.alert('Consulta', 'Não foi possível realizar a consulta'));
     }
 
     function handleSearch(){
@@ -56,6 +59,10 @@ export function Home() {
         fetchPizzas('');
     }
 
+    function handleOpen(id: string) {
+		navigation.navigate('product'), { id };
+	}
+
     useEffect(() => {
         fetchPizzas('');
     }, []);
@@ -64,23 +71,23 @@ export function Home() {
         <Container>
             <Header>
                 <Greeting>
-                    <GreetingEmoji 
+                    <GreetingEmoji
                         source={happyEmoji} />
                     <GreetingText>Olá, Admin</GreetingText>
                 </Greeting>
 
                 <TouchableOpacity>
-                    <MaterialIcons 
-                        name="logout" 
-                        color={COLORS.TITLE} 
+                    <MaterialIcons
+                        name="logout"
+                        color={COLORS.TITLE}
                         size={24} />
                 </TouchableOpacity>
             </Header>
 
-            <Search 
+            <Search
                 onChangeText={setSearch}
                 value={search}
-                onSearch={handleSearch} 
+                onSearch={handleSearch}
                 onClear={handleSearchClear} />
 
             <MenuHeader>
@@ -88,16 +95,22 @@ export function Home() {
                 <MenuItemsNumber>10 pizzas</MenuItemsNumber>
             </MenuHeader>
 
-            <FlatList 
+            <FlatList
                 data={pizzas}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => <ProductCard data={item}/>}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                    <ProductCard
+                        data={item}
+                        onPress={() => handleOpen(item.id)}
+                    />
+                )}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
                     paddingTop: 20,
                     paddingBottom: 125,
-                    marginHorizontal: 24
-                }} />
+                    marginHorizontal: 24,
+                }}
+            />
 
         </Container>
     )
