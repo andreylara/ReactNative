@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { Button } from '@components/Button';
 
 export const Container = styled.View`
     flex: 1;
@@ -65,3 +66,8 @@ export const Title = styled.Text`
         color: ${theme.COLORS.SECONDARY_900};
     `}
 `;
+
+export const NewProducButton = styled(Button)`
+    margin: 0 24px;
+    margin-bottom: ${getBottomSpace() + 12}px;
+`; 
