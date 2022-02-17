@@ -61,11 +61,11 @@ export function Home() {
     }
 
     function handleOpen(id: string) {
-		navigation.navigate('product'), { id };
+		navigation.navigate('product', { id });
 	}
 
     function handleAdd() {
-		navigation.navigate('product'), {};
+		navigation.navigate('product', {});
 	}
 
     useFocusEffect(useCallback(() => {

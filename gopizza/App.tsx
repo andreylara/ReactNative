@@ -27,7 +27,7 @@ export default function App() {
       <StatusBar style="light" translucent backgroundColor="transparent" />
       
       <AuthProvider>
-        <Order />
+        <Routes />
       </AuthProvider>
     </ThemeProvider>
   );

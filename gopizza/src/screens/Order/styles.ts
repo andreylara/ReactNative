@@ -9,7 +9,7 @@ export const Container = styled.KeyboardAvoidingView`
 export const ContentScroll = styled.ScrollView.attrs({
     showsVerticalScrollIndicator: false,
 })`
-    backgroud-color: ${({ theme }) => theme.COLORS.BACKGROUND};
+    background-color: ${({ theme }) => theme.COLORS.BACKGROUND};
 `;
 
 export const Header = styled(LinearGradient).attrs(({ theme }) => ({
