@@ -29,7 +29,7 @@ import {
 
 type PizzaResponse = ProductProps & {
     photo_path: string;
-    prices_sizes: {
+    price_sizes: {
         p: string;
         m: string;
         g: string;
@@ -104,9 +104,9 @@ export function Product() {
                 photo_path: reference.fullPath
             })
             .then(() => navigation.navigate('home'))
-            .catch(() => { 
+            .catch(() => {
                 setIsLoading(false);
-                Alert.alert('Cadastro', 'Não foi possível cadastrar a pizza.'); 
+                Alert.alert('Cadastro', 'Não foi possível cadastrar a pizza.');
             });
     }
 
@@ -114,17 +114,17 @@ export function Product() {
         navigation.goBack();
     }
 
-    function handleDelete(){
+    function handleDelete() {
         firestore()
-        .collection('pizzas')
-        .doc(id)
-        .delete()
-        .then(() => {
-            storage()
-            .ref(photoPath)
+            .collection('pizzas')
+            .doc(id)
             .delete()
-            .then(() => navigation.navigate('home'));
-        })
+            .then(() => {
+                storage()
+                    .ref(photoPath)
+                    .delete()
+                    .then(() => navigation.navigate('home'));
+            })
     }
 
     useEffect(() => {
@@ -140,9 +140,9 @@ export function Product() {
                     setImage(product.photo_url);
                     setPhotoPath(product.photo_path);
                     setDescription(product.description);
-                    setPriceSizeP(product.prices_sizes.p);
-                    setPriceSizeM(product.prices_sizes.m);
-                    setPriceSizeG(product.prices_sizes.g);
+                    setPriceSizeP(product.price_sizes.p);
+                    setPriceSizeM(product.price_sizes.m);
+                    setPriceSizeG(product.price_sizes.g);
                 })
         }
     }, [id]);
@@ -157,7 +157,7 @@ export function Product() {
 
                     <Title>Cadastrar</Title>
                     {id ?
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={handleDelete}>
                             <DeleteLabel>Deletar</DeleteLabel>
                         </TouchableOpacity>
