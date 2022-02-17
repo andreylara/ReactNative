@@ -103,10 +103,11 @@ export function Product() {
                 photo_url,
                 photo_path: reference.fullPath
             })
-            .then(() => { Alert.alert('Cadastro', 'Pizza cadastrada com sucesso.'); })
-            .catch(() => { Alert.alert('Cadastro', 'Não foi possível cadastrar a pizza.'); });
-
-        setIsLoading(false);
+            .then(() => navigation.navigate('home'))
+            .catch(() => { 
+                setIsLoading(false);
+                Alert.alert('Cadastro', 'Não foi possível cadastrar a pizza.'); 
+            });
     }
 
     function handleGoBack() {
@@ -186,7 +187,7 @@ export function Product() {
                     <InputGroup>
                         <InputGroupHeader>
                             <Label>Descrição</Label>
-                            <MaxCharacters>0 de 60</MaxCharacters>
+                            <MaxCharacters>{description.length} de 60</MaxCharacters>
                         </InputGroupHeader>
                         <Input
                             multiline

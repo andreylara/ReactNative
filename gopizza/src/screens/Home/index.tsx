@@ -31,7 +31,7 @@ export function Home() {
 
     function fetchPizzas(value: string){
         const formattedValue = value.toLocaleLowerCase().trim();
-
+        
         firestore()
             .collection('pizzas')
             .orderBy('name_insensitive')
@@ -97,7 +97,7 @@ export function Home() {
 
             <MenuHeader>
                 <Title>Cardápio</Title>
-                <MenuItemsNumber>10 pizzas</MenuItemsNumber>
+                <MenuItemsNumber>{pizzas.length} pizzas</MenuItemsNumber>
             </MenuHeader>
 
             <FlatList
