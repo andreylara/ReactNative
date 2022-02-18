@@ -7,6 +7,7 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import happyEmoji from '@assets/happy.png';
 
+import { useAuth } from "@hooks/auth";
 import { Search } from "@components/Search";
 import { ProductCard, ProductProps } from "@components/ProductCard";
 
@@ -26,12 +27,14 @@ export function Home() {
     const [pizzas, setPizzas] = useState<ProductProps[]>([]);
     const [search, setSearch] = useState('');
 
+    const { user, signOut } = useAuth();
+
     const { COLORS } = useTheme();
     const navigation = useNavigation();
 
-    function fetchPizzas(value: string){
+    function fetchPizzas(value: string) {
         const formattedValue = value.toLocaleLowerCase().trim();
-        
+
         firestore()
             .collection('pizzas')
             .orderBy('name_insensitive')
@@ -51,28 +54,29 @@ export function Home() {
             .catch(() => Alert.alert('Consulta', 'Não foi possível realizar a consulta'));
     }
 
-    function handleSearch(){
+    function handleSearch() {
         fetchPizzas(search);
     }
 
-    function handleSearchClear(){
+    function handleSearchClear() {
         setSearch('');
         fetchPizzas('');
     }
 
     function handleOpen(id: string) {
-		navigation.navigate('product', { id });
-	}
+        const route = user?.isAdmin ? 'product' : 'order';
+        navigation.navigate(route, { id });
+    }
 
     function handleAdd() {
-		navigation.navigate('product', {});
-	}
+        navigation.navigate('product', {});
+    }
 
     useFocusEffect(useCallback(() => {
         fetchPizzas('');
     }, []));
 
-    return(
+    return (
         <Container>
             <Header>
                 <Greeting>
@@ -81,7 +85,8 @@ export function Home() {
                     <GreetingText>Olá, Admin</GreetingText>
                 </Greeting>
 
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={signOut}>
                     <MaterialIcons
                         name="logout"
                         color={COLORS.TITLE}
@@ -117,10 +122,12 @@ export function Home() {
                 }}
             />
 
-            <NewProducButton 
-                title="Cadastrar Pizza"
-                type="secondary"
-                onPress={handleAdd}/>
+            {
+                user?.isAdmin && <NewProducButton
+                    title="Cadastrar Pizza"
+                    type="secondary"
+                    onPress={handleAdd} />
+            }
 
         </Container>
     )

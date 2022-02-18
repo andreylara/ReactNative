@@ -13,3 +13,4 @@ Configuração storage: Firebase > Storage > Rules > 'allow read, write: if fals
 yarn add @react-navigation/native
 expo install react-native-screens react-native-safe-area-context
 yarn add @react-navigation/native-stack
+yarn add @react-navigation/bottom-tabs
