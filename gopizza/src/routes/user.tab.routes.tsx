@@ -46,6 +46,6 @@ export function UserTabRoutes() {
             }}
         />
         </Navigator>
-    )
+    );
 }
 
