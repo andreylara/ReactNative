@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
-import { Platform, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { Alert, Platform, ScrollView } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
+
+import { useAuth } from '@hooks/auth';
 
 import { PIZZA_TYPES } from '@utils/pizzaTypes';
 import { ButtonBack } from '@components/ButtonBack';
 import { RadioButton } from '@components/RadioButton';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
+import { OrderNavigationProps, ProductNavigationProps } from 'src/@types/navigation';
 
 import {
     Container,
@@ -21,15 +25,75 @@ import {
     FormRow,
     Price
 } from './styles';
+import { ProductProps } from '@components/ProductCard';
+
+type PizzaResponse = ProductProps & {
+    price_sizes: {
+        [key: string]: number;
+
+    }
+}
 
 export function Order() {
     const [size, setSize] = useState('');
+    const [pizza, setPizza] = useState<PizzaResponse>({} as PizzaResponse);
+    const [quantity, setQuantity] = useState(0);
+    const [tableNumber, setTableNumber] = useState('');
+    const [sendingOrder, setSendingOrder] = useState(false);
 
+    const { user } = useAuth();
     const navigation = useNavigation();
+    const route = useRoute();
+    const { id } = route.params as OrderNavigationProps;
 
-    function handleGoBack(){
+    const amount = size ? pizza.price_sizes[size] * quantity : '0,00';
+
+    function handleGoBack() {
         navigation.goBack();
     }
+
+    function handleOrder(){
+        if(!size){
+            return Alert.alert('Pedido', 'Selecione o tamanho da pizza.')
+        }
+        if(!tableNumber){
+            return Alert.alert('Pedido', 'Informe o número da mesa.')
+        }
+        if(!quantity){
+            return Alert.alert('Pedido', 'Informe a quantidade.')
+        }
+
+        setSendingOrder(true);
+
+        firestore()
+        .collection('order')
+        .add({
+            quantity,
+            amount,
+            pizza: pizza.name,
+            size,
+            tableNumber: tableNumber,
+            status: 'Preparando',
+            waiter_id: user?.id,
+            image: pizza.photo_url
+        })
+        .then(() => navigation.navigate('home'))
+        .catch(() => {
+            Alert.alert('Pedido', 'Não foi ´possível realizar o pedido.');
+            setSendingOrder(false);
+        })
+    }
+
+    useEffect(() => {
+        if (id) {
+            firestore()
+                .collection('pizzas')
+                .doc(id)
+                .get()
+                .then(response => setPizza(response.data() as PizzaResponse))
+                .catch(() => Alert.alert('Pedido', 'Não foi possível carregar o produto'));
+        }
+    }, [id]);
 
     return (
         <Container behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -41,10 +105,10 @@ export function Order() {
 
                 </Header>
 
-                <Photo source={{ uri: 'https://github.com/andreylara.png' }} />
+                <Photo source={{ uri: pizza.photo_url }} />
 
                 <Form>
-                    <Title>Nome da Pizza</Title>
+                    <Title>{pizza.name}</Title>
                     <Label>Selecione um tamanho</Label>
 
                     <Sizes>
@@ -60,19 +124,27 @@ export function Order() {
                     <FormRow>
                         <InputGroup>
                             <Label>Número da mesa</Label>
-                            <Input keyboardType='numeric' />
+                            <Input
+                                keyboardType='numeric'
+                                onChangeText={setTableNumber} />
                         </InputGroup>
 
                         <InputGroup>
                             <Label>Quantidade</Label>
-                            <Input keyboardType='numeric' />
+                            <Input
+                                keyboardType='numeric'
+                                onChangeText={(value) => setQuantity(Number(value))}>
+                                1
+                            </Input>
                         </InputGroup>
                     </FormRow>
 
-                    <Price>Valor de R$ 00</Price>
+                    <Price>Valor de R$ {amount}</Price>
 
                     <Button
-                        title="Confirmar pedido" />
+                        title="Confirmar pedido" 
+                        onPress={handleOrder}
+                        isLoading={sendingOrder}/>
                 </Form>
             </ContentScroll>
         </Container>

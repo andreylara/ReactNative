@@ -18,7 +18,7 @@ export const Title = styled.Text<TitleProps>`
 
     ${({ theme, color }) => css`
         font-family: ${theme.FONTS.TITLE};
-        color: ${color}.
+        color: ${color};
     `}
 `;
 
