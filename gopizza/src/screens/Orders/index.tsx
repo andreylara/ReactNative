@@ -11,11 +11,29 @@ import { Container, Header, Title } from "./styles";
 
 export function Orders() {
     const [orders, setOrders] = useState<OrderProps[]>([]);
+    //const [message, setMessage] = useState('');
+    //const [newStatus, setNewStatus] = useState('');
+
+    var message = '';
+    var newStatus = '';
 
     const { user } = useAuth();
 
-    function handlePizzaDelivered(id: string){
-        Alert.alert('Pedido', 'Confirmar que a pizza foi entregue?', [
+    function handlePizzaDelivered(id: string, currentStatus: string){      
+        if(currentStatus === 'Preparando'){
+            message = 'Confirmar que a pizza está pronta?';
+            newStatus = 'Pronto';
+            //setMessage('Confirmar que a pizza está pronta?');
+            //setNewStatus('Pronto');
+        }
+        if(currentStatus === 'Pronto'){
+            message = 'Confirmar que a pizza foi entregue?';
+            newStatus = 'Entregue';
+            //setMessage('Confirmar que a pizza foi entregue?');
+            //setNewStatus('Entregue');
+        }
+
+        Alert.alert('Pedido', message, [
             {
                 text: 'Não',
                 style: 'cancel'
@@ -24,7 +42,7 @@ export function Orders() {
                 text: 'Sim',
                 onPress: () => {
                     firestore().collection('orders').doc(id).update({
-                        status: 'Entregue'
+                        status: newStatus
                     });
                 }
             }
@@ -63,7 +81,7 @@ export function Orders() {
                         index={index} 
                         data={item} 
                         disabled={item.status === 'Entregue'}
-                        onPress={() => handlePizzaDelivered(item.id)}/>
+                        onPress={() => handlePizzaDelivered(item.id, item.status)}/>
                 )}
                 numColumns={2}
                 showsVerticalScrollIndicator={false}
