@@ -66,7 +66,7 @@ export function Order() {
         setSendingOrder(true);
 
         firestore()
-        .collection('order')
+        .collection('orders')
         .add({
             quantity,
             amount,
@@ -133,9 +133,7 @@ export function Order() {
                             <Label>Quantidade</Label>
                             <Input
                                 keyboardType='numeric'
-                                onChangeText={(value) => setQuantity(Number(value))}>
-                                1
-                            </Input>
+                                onChangeText={(value) => setQuantity(Number(value))}/>
                         </InputGroup>
                     </FormRow>
 
