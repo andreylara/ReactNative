@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts, DMSans_400Regular } from '@expo-google-fonts/dm-sans';

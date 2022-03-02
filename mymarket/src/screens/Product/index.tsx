@@ -44,10 +44,6 @@ export function Product() {
             return Alert.alert('Cadastro', 'Informe o nome do produto.');
         }
 
-        if (!description.trim()) {
-            return Alert.alert('Cadastro', 'Informe a descrição do produto.');
-        }
-
         setIsLoading(true);
         setQuantity;
         setWeight;

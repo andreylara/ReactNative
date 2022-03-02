@@ -55,3 +55,4 @@ web-build/
 dist/
 
 google-services.json
+my-upload-key.keystore
