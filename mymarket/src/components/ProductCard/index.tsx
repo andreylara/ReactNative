@@ -11,6 +11,7 @@ import {
     Identification,
     Description,
     Date,
+    Weight,
     Line,
     StatusContainer,
     StatusLabel,
@@ -56,19 +57,25 @@ export function ProductCard({ data, ...rest }: Props) {
                                     color={COLORS.SHAPE} />
                             </State>
                         </Identification>
+                        
                         <Description>
                             {data.description}
                         </Description>
 
-                        <Description>
-                            Menor preço: R$ {data.lowestPrice}
-                        </Description>
+                        <Identification>
+                            <Description>
+                                Menor preço: R$ {data.lowestPrice}
+                            </Description>
+                        </Identification>
 
                         <Identification>
                             <Description>
-                                Último preço: R$ {data.price}
+                                Última compra: R$ {data.price}
                             </Description>
-                            <Date>24/02/2022</Date>
+                            <Weight>
+                                {data.weight} kg/L
+                            </Weight>
+                            <Date>{data.date}</Date>
                         </Identification>
                     </Details>
                 </Content>

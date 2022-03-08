@@ -32,7 +32,7 @@ export function Product() {
     const [lowestPrice, setLowestPrice] = useState(0);
     const [bought, setBought] = useState(false);
     const [added, setAdded] = useState(false);
-    const [date, setDate] = useState(new Date().toDateString());
+    const [date, setDate] = useState(new Date().toLocaleDateString());
     const [isLoading, setIsLoading] = useState(false);
 
     const navigation = useNavigation();

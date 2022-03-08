@@ -11,7 +11,7 @@ type StatusProps ={
 export const Container = styled.TouchableOpacity<ContainerProps>`
     width: 50%;
     align_items: center;
-    padding: 24px;
+    padding: 14px;
 
     ${({ theme, index }) => css`
         border-right-width: ${index % 2 > 0 ? 0 : 1}px;

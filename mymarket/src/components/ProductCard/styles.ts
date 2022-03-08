@@ -56,6 +56,16 @@ export const Date = styled.Text`
     `}
 `;
 
+export const Weight = styled.Text`
+    font-size: 12px;
+    line-height: 20px;
+
+    ${({ theme}) => css`
+        font-family: ${theme.FONTS.TEXT};
+        color: ${theme.COLORS.SECONDARY_400};
+    `}
+`;
+
 export const Line = styled.View`
     height: 1px;
     width: 100%;

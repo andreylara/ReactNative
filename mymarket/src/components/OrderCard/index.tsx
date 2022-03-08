@@ -14,7 +14,7 @@ export type ListsProps = {
     name: string;
     bought: boolean;
     price: string;
-    quantity: string;
+    weight: string;
     added: boolean;
 }
 
@@ -31,7 +31,7 @@ export function OrderCard({ index, data, ...rest }: Props) {
 
             {data.bought &&
                 <Description>
-                    Qnt {data.quantity} - R$: {data.price}
+                    {data.weight} kg/L por R$ {data.price}
                 </Description>
             }
 
